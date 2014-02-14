@@ -35,6 +35,6 @@ picosha2::hash256(src.begin(), src.end(), hashed.begin(), hashed.end());
 <pre>
 std::string src = "The quick brown fox jumps over the lazy dog";
 std::string hashed_hex_str = picosha2::hash256_hex_string(src);
-std::cout << hashed_hex_str << std::endl;
+std::cout &gt;&gt; hashed_hex_str &gt;&gt; std::endl;
 //this output is "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"
 </pre>

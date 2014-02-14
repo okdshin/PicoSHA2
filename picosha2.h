@@ -71,13 +71,13 @@ word_t ssig1(word_t x){
 }
 
 template<typename RaIter1, typename RaIter2>
-void hash_block(RaIter1 message_digest, RaIter2 begin, RaIter2 end){
+void hash_block(RaIter1 message_digest, RaIter2 first, RaIter2 last){
 	word_t w[64];
 	for(std::size_t i = 0; i < 16; ++i){
-		w[i] = ((*(begin+i*4)&0xff)<<24)
-			|((*(begin+i*4+1)&0xff)<<16) 
-			|((*(begin+i*4+2)&0xff)<<8)
-			|(*(begin+i*4+3)&0xff); 
+		w[i] = ((*(first+i*4)&0xff)<<24)
+			|((*(first+i*4+1)&0xff)<<16) 
+			|((*(first+i*4+2)&0xff)<<8)
+			|(*(first+i*4+3)&0xff); 
 	}
 	for(std::size_t i = 16; i < 64; ++i){
 		w[i] = ssig1(w[i-2])+w[i-7]+ssig0(w[i-15])+w[i-16];
@@ -115,18 +115,18 @@ void hash_block(RaIter1 message_digest, RaIter2 begin, RaIter2 end){
 }
 
 template<typename RaIter, typename OutIter>
-void hash(RaIter begin, RaIter end, OutIter result){
+void hash256(RaIter first, RaIter last, OutIter result){
 	word_t h[8];
 	std::copy(initial_message_digest, initial_message_digest+8, h);
 	std::size_t i = 0;
-	std::size_t data_length = std::distance(begin, end);
+	std::size_t data_length = std::distance(first, last);
 	for(i = 0; i+64 < data_length; i+=64){
-		hash_block(h, begin+i, begin+i+64);	
+		hash_block(h, first+i, first+i+64);	
 	}
 
 	byte_t temp[64];
 	std::size_t remains = data_length-i;
-	std::copy(begin+i, end, temp);
+	std::copy(first+i, last, temp);
 	temp[remains] = 0x80;
 
 	if(remains > 64-8-1){
@@ -156,18 +156,18 @@ void hash(RaIter begin, RaIter end, OutIter result){
 	}
 }
 
-/*
 template<typename RaContainer, typename OutContainer>
-void hash2(const RaContainer& src, RaContainer& dst){
-	hash(src.begin(), src.end(), dst.begin(), std::back_inserter(dst));
+void hash256(const RaContainer& src, OutContainer& dst){
+	hash256(src.begin(), src.end(), std::back_inserter(dst));
 }
 
 template<typename OutContainer, typename RaContainer>
-OutContainer hash3(const RaContainer& src){
+OutContainer hash256(const RaContainer& src){
 	OutContainer result;
-	hash(src.begin(), src.end(), result);
+	hash256(src, result);
 	return result;
 }
-*/
+
+}//namespace picosha2
 
 #endif //PICOSHA2_H

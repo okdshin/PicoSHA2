@@ -1,4 +1,4 @@
-CXX = clang++ -std=c++98 -D__STRICT_ANSI__
+CXX = g++ --std=c++98
 CXXFLAGS = -Wall -g -D PICOSHA2_UNIT_TEST
 INCLUDES = 
 LIBS =

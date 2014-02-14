@@ -7,16 +7,22 @@
 
 using namespace picosha2;
 
-template<typename RaIter>
-void OutputHex(RaIter begin, RaIter end, std::ostream& os){
+template<typename InIter>
+void OutputHex(InIter first, InIter last, std::ostream& os){
 	os.setf(std::ios::hex, std::ios::basefield);
-	while(begin != end){
+	while(first != last){
 		os.width(2);
 		os.fill('0');
-		os << static_cast<unsigned int>(*begin);
-		++begin;
+		os << static_cast<unsigned int>(*first);
+		++first;
 	}	
 	os.setf(std::ios::dec, std::ios::basefield);
+}
+
+template<typename InIter>
+void OutputHexLine(InIter first, InIter last, std::ostream& os){
+	OutputHex(first, last, os);
+	os << "\n";
 }
 
 template<typename OutIter>
@@ -38,34 +44,63 @@ void InputHex(std::istream& is, OutIter out){
 	}
 }
 
+template<typename OutIter>
+void HexStringToBytes(const std::string& hex_str, OutIter out){
+	std::istringstream iss(hex_str);
+	InputHex(iss, out);
+}
+
+template<typename InIter>
+std::string BytesToHexString(InIter first, InIter last){
+	std::ostringstream oss;
+	OutputHex(first, last, oss);
+	return oss.str();
+}
+
+template<typename InIter1, typename InIter2>
+bool IsSame(InIter1 first1, InIter1 last1, InIter2 first2, InIter2 last2){
+	if(std::distance(first1, last1) != std::distance(first2, last2)){
+		return false;
+	}
+	return std::search(first1, last1, first2, last2) != last1;
+}
+
+
+void Test(){
+	typedef std::pair<std::string, std::string> mess_and_hash;
+	const std::pair<std::string, std::string> message_list[3] = {
+		mess_and_hash("", 
+				"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
+		mess_and_hash("The quick brown fox jumps over the lazy dog",
+				"d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"),
+		mess_and_hash("The quick brown fox jumps over the lazy dog.",
+				"ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c")
+	};
+
+	for(std::size_t i = 0; i < 3; ++i){
+		std::string src = message_list[i].first;
+		std::vector<byte_t> ans;
+		HexStringToBytes(message_list[i].second, std::back_inserter(ans));
+		{
+			std::vector<byte_t> hashed(32, 0);
+			hash256(src.begin(), src.end(), hashed.begin());
+			std::cout << "src: \"" << src << "\"\n";
+			OutputHexLine(hashed.begin(), hashed.end(), std::cout << "hashed: ");
+			OutputHexLine(ans.begin(), ans.end(), std::cout << "answer: ");
+			if(IsSame(hashed.begin(), hashed.end(), ans.begin(), ans.end())){
+				std::cout << "collect!" << std::endl;
+			}
+			else {
+				std::cout << "error!" << std::endl; 
+			}
+			std::cout << "\n";
+		}
+	}
+}
+
 int main(int argc, char* argv[])
 {
-	std::string message = "The quick brown fox jumps over the lazy dog";
-	//std::string message = "";
-	OutputHex(message.begin(), message.end(), std::cout << "src : ");
-	std::cout << "\n";
-	std::vector<unsigned char> result(32, 0);
-	picosha2::hash(message.begin(), message.end(), result.begin());
-	OutputHex(result.begin(), result.end(), std::cout << "hash: ");
-	std::cout << "\n";
-
-	std::vector<byte_t>collect_answer;
-	std::string collect_answer_hex_str = 
-		"d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592";
-	std::cout << "coll: " << collect_answer_hex_str << std::endl;
-	std::istringstream iss(collect_answer_hex_str);
-	InputHex(iss, std::back_inserter(collect_answer));
-	OutputHex(collect_answer.begin(), collect_answer.end(), std::cout << "coll: ");
-	std::cout << "\n";
-	if(collect_answer.end() != 
-			std::search(collect_answer.begin(), collect_answer.end(), 
-				result.begin(), result.end())){
-		std::cout << "collect!!" << std::endl; 
-	}
-	else {
-		std::cout << "incollect..." << std::endl;
-	}
-
+	Test();
 
     return 0;
 }

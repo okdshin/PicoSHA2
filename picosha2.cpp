@@ -94,6 +94,12 @@ void test(){
 			PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
 		}
 		{
+			unsigned char hash_c_array[32];
+			picosha2::hash256(src_str.begin(), src_str.end(), hash_c_array, hash_c_array+32);
+			std::vector<unsigned char> hash(hash_c_array, hash_c_array+32);
+			PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
+		}
+		{
 			std::list<unsigned char> hash(32);
 			picosha2::hash256(src_str.begin(), src_str.end(), hash.begin(), hash.end());
 			PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
@@ -137,6 +143,12 @@ void test(){
 		{
 			std::list<unsigned char> hash(32);
 			picosha2::hash256(src_vect.begin(), src_vect.end(), hash.begin(), hash.end());
+			PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
+		}
+		{
+			std::list<unsigned char> hash(32);
+			picosha2::hash256(src_vect.data(), src_vect.data()+src_vect.size(), 
+					hash.begin(), hash.end());
 			PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
 		}
 		{

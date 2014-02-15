@@ -188,6 +188,16 @@ void hash256(RaIter first, RaIter last, OutIter first2, OutIter last2){
 	}
 }
 
+template<typename RaIter, typename OutContainer>
+void hash256(RaIter first, RaIter last, OutContainer& dst){
+	hash256(first, last, dst.begin(), dst.end());
+}
+
+template<typename RaContainer, typename OutIter>
+void hash256(const RaContainer& src, OutIter first, OutIter last){
+	hash256(src.begin(), src.end(), first, last);
+}
+
 template<typename RaContainer, typename OutContainer>
 void hash256(const RaContainer& src, OutContainer& dst){
 	hash256(src.begin(), src.end(), dst.begin(), dst.end());

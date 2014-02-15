@@ -1,5 +1,5 @@
 /*
-PThe MIT License (MIT)
+The MIT License (MIT)
 
 Copyright (C) 2014 okdshin
 
@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+#ifndef PICOSHA2_H
 #define PICOSHA2_H
 //picosha2:20140213
 #include <iostream>
@@ -108,10 +109,10 @@ void hash_block(RaIter1 message_digest, RaIter2 first, RaIter2 last){
 	word_t w[64];
 	std::fill(w, w+64, 0);
 	for(std::size_t i = 0; i < 16; ++i){
-		w[i] = (static_cast<word_t>(*(first+i*4)&0xff)<<24)
-			|(static_cast<word_t>(*(first+i*4+1)&0xff)<<16) 
-			|(static_cast<word_t>(*(first+i*4+2)&0xff)<<8)
-			|(static_cast<word_t>(*(first+i*4+3)&0xff)); 
+		w[i] = (static_cast<word_t>(mask_8bit(*(first+i*4)))<<24)
+			|(static_cast<word_t>(mask_8bit(*(first+i*4+1)))<<16) 
+			|(static_cast<word_t>(mask_8bit(*(first+i*4+2)))<<8)
+			|(static_cast<word_t>(mask_8bit(*(first+i*4+3)))); 
 	}
 	for(std::size_t i = 16; i < 64; ++i){
 		w[i] = mask_32bit(ssig1(w[i-2])+w[i-7]+ssig0(w[i-15])+w[i-16]);
@@ -192,13 +193,6 @@ void hash256(const RaContainer& src, OutContainer& dst){
 	hash256(src.begin(), src.end(), dst.begin(), dst.end());
 }
 
-template<typename OutContainer, typename RaContainer>
-OutContainer hash256(const RaContainer& src){
-	OutContainer result(32);
-	hash256(src, result);
-	return result;
-}
-
 template<typename InIter>
 void output_hex(InIter first, InIter last, std::ostream& os){
 	os.setf(std::ios::hex, std::ios::basefield);
@@ -209,45 +203,6 @@ void output_hex(InIter first, InIter last, std::ostream& os){
 		++first;
 	}	
 	os.setf(std::ios::dec, std::ios::basefield);
-}
-
-template<typename OutIter>
-void input_hex(std::istream& is, OutIter first, OutIter last){
-	char c;
-	std::vector<char> buffer;
-	while(first != last){
-		if(buffer.size() == 2){
-			*(first++) = (buffer.front()*16+buffer.back());
-			buffer.clear();
-		}
-		is >> c;
-		if('0' <= c && c <= '9'){
-			buffer.push_back(c-'0');
-		}else
-		if('a' <= c && c <= 'f'){
-			buffer.push_back(c-'a'+10);	
-		}
-	}
-}
-
-template<typename OutIter>
-void hex_string_to_bytes(const std::string& hex_str, OutIter first, OutIter last){
-	assert(hex_str.length() >= 2*std::distance(first, last));
-	std::istringstream iss(hex_str);
-	input_hex(iss, first, last);
-}
-
-template<typename OutContainer>
-void hex_string_to_bytes(const std::string& hex_str, OutContainer& bytes){
-	hex_string_to_bytes(hex_str, bytes.begin(), bytes.end());
-}
-
-template<typename OutContainer>
-OutContainer hex_string_to_bytes(const std::string& hex_str){
-	assert((hex_str.length()&1) == 0);
-	std::vector<byte_t> bytes(hex_str.length()>>1);
-	hex_string_to_bytes(hex_str, bytes.begin(), bytes.end());
-	return bytes;
 }
 
 template<typename InIter>
@@ -285,13 +240,6 @@ void hash256_hex_string(RaIter first, RaIter last, std::string& hex_str){
 	hex_str.assign(oss.str());
 }
 
-/*
-template<typename RaContainer>
-void hash256_hex_string(const RaContainer& src, std::string& hex_str){
-	hash256_hex_string(src.begin(), src.end(), hex_str);
-}
-*/
-
 template<typename RaIter>
 std::string hash256_hex_string(RaIter first, RaIter last){
 	std::string hex_str;
@@ -299,35 +247,18 @@ std::string hash256_hex_string(RaIter first, RaIter last){
 	return hex_str;
 }
 
+void hash256_hex_string(const std::string& src, std::string& hex_str){
+	hash256_hex_string(src.begin(), src.end(), hex_str);
+}
+
+template<typename RaContainer>
+void hash256_hex_string(const RaContainer& src, std::string& hex_str){
+	hash256_hex_string(src.begin(), src.end(), hex_str);
+}
+
 template<typename RaContainer>
 std::string hash256_hex_string(const RaContainer& src){
 	return hash256_hex_string(src.begin(), src.end());
-}
-
-template<typename InIter1, typename InIter2>
-bool is_same_bytes(InIter1 first1, InIter1 last1, InIter2 first2, InIter2 last2){
-	if(std::distance(first1, last1) != std::distance(first2, last2)){
-		return false;
-	}
-	return std::search(first1, last1, first2, last2) != last1;
-}
-
-template<typename InIter, typename InContainer>
-bool is_same_bytes(InIter first, InIter last, const InContainer& bytes){
-	if(std::distance(first, last) != std::distance(bytes.begin(), bytes.end())){
-		return false;
-	}
-	return std::search(first, last, bytes.begin(), bytes.end()) != last;
-}
-
-template<typename InIter, typename InContainer>
-bool is_same_bytes(const InContainer& bytes, InIter first, InIter last){
-	return is_same_bytes(first, last, bytes);
-}
-
-template<typename InContainer1, typename InContainer2>
-bool is_same_bytes(const InContainer1& bytes1, const InContainer2& bytes2){
-	return is_same_bytes(bytes1.begin(), bytes1.end(), bytes2.begin(), bytes2.end());
 }
 
 }//namespace picosha2

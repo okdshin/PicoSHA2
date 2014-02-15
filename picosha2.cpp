@@ -94,6 +94,11 @@ void test(){
 			PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
 		}
 		{
+			std::vector<unsigned char> hash(32);
+			picosha2::hash256(src_str.begin(), src_str.end(), hash);
+			PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
+		}
+		{
 			unsigned char hash_c_array[32];
 			picosha2::hash256(src_str.begin(), src_str.end(), hash_c_array, hash_c_array+32);
 			std::vector<unsigned char> hash(hash_c_array, hash_c_array+32);

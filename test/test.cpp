@@ -1,5 +1,4 @@
-#ifdef PICOSHA2_UNIT_TEST
-#include "picosha2.h"
+#include "../picosha2.h"
 #include <iostream>
 #include <list>
 
@@ -191,4 +190,3 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-#endif

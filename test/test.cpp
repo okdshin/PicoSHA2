@@ -1,6 +1,7 @@
 #include "../picosha2.h"
 #include <iostream>
 #include <list>
+#include <fstream>
 
 #define PICOSHA2_CHECK_EQUAL(a, b){\
 	if(a == b){\
@@ -178,6 +179,22 @@ void test(){
 		{
 			std::string hash_hex_str = picosha2::hash256_hex_string(src_vect);
 			PICOSHA2_CHECK_EQUAL(ans_hex_str, hash_hex_str);
+		}
+		{
+			picosha2::hash256_one_by_one hasher;
+			std::ifstream ifs("sample.txt");
+			std::string file_str((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+			std::size_t i = 0;
+			for(i = 0; i+(file_str.length()/10) < file_str.length(); i+=(file_str.length()/10)){
+				hasher.process(file_str.begin()+i, file_str.begin()+i+file_str.length()/10);
+			}
+			hasher.process(file_str.begin()+i, file_str.end());
+			std::string one_by_one_hex_string;
+			get_hash_hex_string(hasher, one_by_one_hex_string);
+			std::string hex_string;
+			picosha2::hash256_hex_string(file_str.begin(), file_str.end(), hex_string);
+			PICOSHA2_CHECK_EQUAL(one_by_one_hex_string, hex_string);
+			std::cout << one_by_one_hex_string << " " << hex_string << std::endl;
 		}
 
 	}

@@ -11,6 +11,16 @@ PicoSHA2 is a tiny SHA256 hash generator for C++ with following properties:
 - STL-friendly
 - licensed under MIT License
 
+## Generating SHA256 hash hex string from byte stream
+
+<pre>
+picosha2::hash256_one_by_one hasher;
+...
+hasher.process(block.begin(), block.end());
+...
+hasher.finish();
+std::string hex_str = picosha2::get_hash_hex_string(hasher);
+</pre>
 
 ## Generating SHA256 hash hex string from std::string
 

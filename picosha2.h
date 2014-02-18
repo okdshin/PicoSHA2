@@ -147,6 +147,9 @@ void hash256_block(RaIter1 message_digest, RaIter2 first, RaIter2 last){
 	*(message_digest+5) += f;
 	*(message_digest+6) += g;
 	*(message_digest+7) += h;
+	for(std::size_t i = 0; i < 8; ++i){
+		*(message_digest+i) = mask_32bit(*(message_digest+i));
+	}
 }
 
 }//namespace detail
@@ -206,7 +209,7 @@ public:
 		data_length_ += std::distance(first, last);
 		std::copy(first, last, std::back_inserter(buffer_));
 		std::size_t i = 0;
-		for(;i+64 < buffer_.size(); i+=64){
+		for(;i+64 <= buffer_.size(); i+=64){
 			detail::hash256_block(h_, buffer_.begin()+i, buffer_.begin()+i+64);	
 		}
 		buffer_.erase(buffer_.begin(), buffer_.begin()+i);

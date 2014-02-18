@@ -259,6 +259,12 @@ void get_hash_hex_string(const hash256_one_by_one& hasher, std::string& hex_str)
 	return bytes_to_hex_string(hash, hash+32, hex_str);
 }
 
+std::string get_hash_hex_string(const hash256_one_by_one& hasher){
+	std::string hex_str;
+	get_hash_hex_string(hasher, hex_str);
+	return hex_str;
+}
+
 template<typename RaIter, typename OutIter>
 void hash256(RaIter first, RaIter last, OutIter first2, OutIter last2){
 	hash256_one_by_one hasher;

@@ -9,6 +9,7 @@ int main(int argc, char* argv[])
 		while(true){
 			std::string line;
 			std::getline(std::cin, line);
+			std::cout << line.length() << std::endl;
 			if(line == "hash!"){
 				break;
 			}

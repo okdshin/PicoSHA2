@@ -67,19 +67,34 @@ void hex_string_to_bytes(const std::string& hex_str, OutContainer& bytes){
 }
 
 typedef std::pair<std::string, std::string> mess_and_hash;
-const size_t sample_size = 3;
-const std::pair<std::string, std::string> sample_message_list[3] = {
+const size_t sample_size = 10;
+const std::pair<std::string, std::string> sample_message_list[sample_size] = {
 	mess_and_hash("", 
 			"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
 	mess_and_hash("The quick brown fox jumps over the lazy dog",
 			"d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"),
 	mess_and_hash("The quick brown fox jumps over the lazy dog.",
-			"ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c")
+			"ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c"),
+	mess_and_hash("For this sample, this 63-byte string will be used as input data",
+			"f08a78cbbaee082b052ae0708f32fa1e50c5c421aa772ba5dbb406a2ea6be342"),
+	mess_and_hash("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
+			"248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1"),
+	mess_and_hash("This is exactly 64 bytes long, not counting the terminating byte",
+			"ab64eff7e88e2e46165e29f2bce41826bd4c7b3552f6b382a9e7d3af47c245f8"),
+	mess_and_hash("This is exactly 64 bytes long, not counting the terminati",
+			"46db250ef6d667908de17333c25343778f495d7a8010b9cfa2af97940772e8cd"),
+	mess_and_hash("This is exactly 64 bytes long, not counting the terminatin",
+			"af38fc14dbbbcc6cd4c9cc73988e1b08373b4e6b04ba61b41f999731185b51af"),
+	mess_and_hash("This is exactly 64 bytes long, not counting the terminating",
+			"f778b361f650cdd9981ca13adb77f26b8419a407b3938fc54b14e9971045fa9d"),
+	mess_and_hash("This is exactly 64 bytes long, not counting the terminating b",
+			"9aa72d139c7d7e5a35ea525e2ba6704163555ba647927765a61ccbf12ec60479")
 };
 
 void test(){
-	for(std::size_t i = 0; i < 3; ++i){
+	for(std::size_t i = 0; i < sample_size; ++i){
 		std::string src_str = sample_message_list[i].first;
+		std::cout << "src_str: " << src_str  << " size: " << src_str.length() << std::endl;
 		std::string ans_hex_str = sample_message_list[i].second;
 		std::vector<unsigned char> ans(32);
 		hex_string_to_bytes(ans_hex_str, ans);
@@ -180,23 +195,24 @@ void test(){
 			std::string hash_hex_str = picosha2::hash256_hex_string(src_vect);
 			PICOSHA2_CHECK_EQUAL(ans_hex_str, hash_hex_str);
 		}
-		{
-			picosha2::hash256_one_by_one hasher;
-			std::ifstream ifs("sample.txt");
-			std::string file_str((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-			std::size_t i = 0;
-			for(i = 0; i+(file_str.length()/10) < file_str.length(); i+=(file_str.length()/10)){
-				hasher.process(file_str.begin()+i, file_str.begin()+i+file_str.length()/10);
-			}
-			hasher.process(file_str.begin()+i, file_str.end());
-			std::string one_by_one_hex_string;
-			get_hash_hex_string(hasher, one_by_one_hex_string);
-			std::string hex_string;
-			picosha2::hash256_hex_string(file_str.begin(), file_str.end(), hex_string);
-			PICOSHA2_CHECK_EQUAL(one_by_one_hex_string, hex_string);
-			std::cout << one_by_one_hex_string << " " << hex_string << std::endl;
+	}
+	{
+		picosha2::hash256_one_by_one hasher;
+		std::ifstream ifs("sample.txt");
+		std::string file_str((std::istreambuf_iterator<char>(ifs)), 
+				std::istreambuf_iterator<char>());
+		std::size_t i = 0;
+		std::size_t block_size = file_str.length()/10;
+		for(i = 0; i+block_size <= file_str.length(); i+=block_size){
+			hasher.process(file_str.begin()+i, file_str.begin()+i+block_size);
 		}
-
+		hasher.process(file_str.begin()+i, file_str.end());
+		hasher.finish();
+		std::string one_by_one_hex_string;
+		get_hash_hex_string(hasher, one_by_one_hex_string);
+		std::string hex_string;
+		picosha2::hash256_hex_string(file_str.begin(), file_str.end(), hex_string);
+		PICOSHA2_CHECK_EQUAL(one_by_one_hex_string, hex_string);
 	}
 }
 

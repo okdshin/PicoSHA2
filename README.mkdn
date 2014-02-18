@@ -22,6 +22,8 @@ hasher.finish();
 std::string hex_str = picosha2::get_hash_hex_string(hasher);
 </pre>
 
+example/interactive_hasher.cpp has more detail information.
+
 ## Generating SHA256 hash hex string from std::string
 
 <pre>

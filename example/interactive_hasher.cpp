@@ -3,13 +3,13 @@
 
 int main(int argc, char* argv[])
 {
+	std::cout << "Input freely. To get hash, input \"hash!\". " << std::endl;
 	picosha2::hash256_one_by_one hasher;
 	while(true){
-		hasher.init();
+		hasher.init(); //reset hasher state
 		while(true){
 			std::string line;
 			std::getline(std::cin, line);
-			std::cout << line.length() << std::endl;
 			if(line == "hash!"){
 				break;
 			}

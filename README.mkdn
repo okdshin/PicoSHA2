@@ -6,6 +6,8 @@ Copyright &copy; 2014 okdshin
 
 PicoSHA2 is a tiny SHA256 hash generator for C++ with following properties:
 
+!!!! WARNING: under IA-32 archtecture, picosha2.h doesn't work correctly. !!!!
+
 - header-file only
 - no external dependencies (only uses standard C++ libraries)
 - STL-friendly

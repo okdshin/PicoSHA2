@@ -200,13 +200,13 @@ public:
 
 	void init(){
 		buffer_.clear();
-		data_length_ = 0;
+		std::fill(data_length_digits_, data_length_digits_+4, 0);
 		std::copy(detail::initial_message_digest, detail::initial_message_digest+8, h_);
 	}
 
 	template<typename RaIter>
 	void process(RaIter first, RaIter last){
-		data_length_ += std::distance(first, last);
+		add_to_data_length(std::distance(first, last));
 		std::copy(first, last, std::back_inserter(buffer_));
 		std::size_t i = 0;
 		for(;i+64 <= buffer_.size(); i+=64){
@@ -231,12 +231,15 @@ public:
 			std::fill(temp+remains+1, temp+64-4, 0);
 		}
 
+		/*
 		//TODO extend the message length limit to 64bit if able
 		word_t bit_length = data_length_*8;
-		assert("message is too long" && bit_length <= /*2^32-1=*/4294967295u);
+		assert("message is too long" && bit_length <= 4294967295u);
 		for(std::size_t i = 0; i < 4; ++i) {
 			temp[60+i] = detail::mask_8bit(static_cast<byte_t>(bit_length >> (24-i*8)));
 		}
+		*/
+		write_data_bit_length(&(temp[56]));
 		detail::hash256_block(h_, temp, temp+64);
 	}
 
@@ -250,8 +253,32 @@ public:
 	}
 
 private:
+	void add_to_data_length(word_t n) {
+		word_t carry = 0;
+		data_length_digits_[0] += n;
+		for(std::size_t i = 0; i < 4; ++i) {
+			data_length_digits_[i] += carry;
+			if(data_length_digits_[i] >= 65536u) {
+				data_length_digits_[i] -= 65536u;
+				carry = 1;
+			}
+			else {
+				break;
+			}
+		}
+	}
+	void write_data_bit_length(byte_t* begin) {
+		word_t data_bit_length_digits[4];
+		for(std::size_t i = 0; i < 4; ++i) {
+			data_bit_length_digits[i] = data_length_digits_[i] << 3;
+		}
+		for(int i = 3; i >= 0; --i) {
+			(*begin++) = static_cast<byte_t>(data_bit_length_digits[i] >> 8);
+			(*begin++) = static_cast<byte_t>(data_bit_length_digits[i]);
+		}
+	}
 	std::vector<byte_t> buffer_;
-	std::size_t data_length_;
+	word_t data_length_digits_[4];
 	word_t h_[8];
 };
 

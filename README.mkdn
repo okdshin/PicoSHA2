@@ -9,7 +9,6 @@ PicoSHA2 is a tiny SHA256 hash generator for C++ with following properties:
 - header-file only
 - no external dependencies (only uses standard C++ libraries)
 - STL-friendly
-- the max length of a message is 4294967295(=2^32-1) bytes
 - licensed under MIT License
 
 ## Generating SHA256 hash hex string from byte stream

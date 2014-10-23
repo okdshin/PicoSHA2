@@ -231,7 +231,7 @@ public:
 			std::fill(temp+remains+1, temp+64-4, 0);
 		}
 
-		//TODO extend the message length limit to 64bit if enable
+		//TODO extend the message length limit to 64bit if able
 		word_t bit_length = data_length_*8;
 		assert("message is too long" && bit_length <= /*2^32-1=*/4294967295u);
 		for(std::size_t i = 0; i < 4; ++i) {

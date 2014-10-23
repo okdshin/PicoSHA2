@@ -225,20 +225,15 @@ public:
 		if(remains > 55){
 			std::fill(temp+remains+1, temp+64, 0);
 			detail::hash256_block(h_, temp, temp+64);
-			std::fill(temp, temp+64-8, 0);
+			std::fill(temp, temp+64-4, 0);
 		}
 		else {
-			std::fill(temp+remains+1, temp+64-8, 0);
+			std::fill(temp+remains+1, temp+64-4, 0);
 		}
 
-		/*
+		//TODO extend the message length limit to 64bit if enable
 		word_t bit_length = data_length_*8;
-		for(std::size_t i = 0; i < 8; ++i){
-			temp[56+i] = detail::mask_8bit(static_cast<byte_t>(bit_length >> (56-i*8)));
-		}
-		*/
-		std::fill(temp+64-8, temp+64-4, 0);
-		word_t bit_length = data_length_*8;
+		assert("message is too long" && bit_length <= /*2^32-1=*/4294967295u);
 		for(std::size_t i = 0; i < 4; ++i) {
 			temp[60+i] = detail::mask_8bit(static_cast<byte_t>(bit_length >> (24-i*8)));
 		}

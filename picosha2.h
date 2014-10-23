@@ -231,14 +231,6 @@ public:
 			std::fill(temp+remains+1, temp+64-4, 0);
 		}
 
-		/*
-		//TODO extend the message length limit to 64bit if able
-		word_t bit_length = data_length_*8;
-		assert("message is too long" && bit_length <= 4294967295u);
-		for(std::size_t i = 0; i < 4; ++i) {
-			temp[60+i] = detail::mask_8bit(static_cast<byte_t>(bit_length >> (24-i*8)));
-		}
-		*/
 		write_data_bit_length(&(temp[56]));
 		detail::hash256_block(h_, temp, temp+64);
 	}

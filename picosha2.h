@@ -270,7 +270,7 @@ private:
 		word_t carry = 0;
 		for(std::size_t i = 0; i < 4; ++i) {
 			word_t before_val = data_bit_length_digits[i];
-			data_bit_length_digits[i] << 3;
+			data_bit_length_digits[i] <<= 3;
 			data_bit_length_digits[i] |= carry;
 			data_bit_length_digits[i] &= 65535u;
 			carry = (before_val >> (16-3)) & 65535u;

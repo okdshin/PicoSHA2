@@ -198,7 +198,7 @@ void test(){
 	}
 	{
 		picosha2::hash256_one_by_one hasher;
-		std::ifstream ifs("sample.txt");
+		std::ifstream ifs("test.cpp");
 		std::string file_str((std::istreambuf_iterator<char>(ifs)), 
 				std::istreambuf_iterator<char>());
 		std::size_t i = 0;

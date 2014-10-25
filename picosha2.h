@@ -261,16 +261,29 @@ private:
 	}
 	void write_data_bit_length(byte_t* begin) {
 		word_t data_bit_length_digits[4];
+		std::copy(
+			data_length_digits_, data_length_digits_+4, 
+			data_bit_length_digits
+		);
+
+		// convert byte length to bit length (multiply 8 or shift 3 times left)
+		word_t carry = 0;
 		for(std::size_t i = 0; i < 4; ++i) {
-			data_bit_length_digits[i] = data_length_digits_[i] << 3;
+			word_t before_val = data_bit_length_digits[i];
+			data_bit_length_digits[i] << 3;
+			data_bit_length_digits[i] |= carry;
+			data_bit_length_digits[i] &= 65535u;
+			carry = (before_val >> (16-3)) & 65535u;
 		}
+
+		// write data_bit_length
 		for(int i = 3; i >= 0; --i) {
 			(*begin++) = static_cast<byte_t>(data_bit_length_digits[i] >> 8);
 			(*begin++) = static_cast<byte_t>(data_bit_length_digits[i]);
 		}
 	}
 	std::vector<byte_t> buffer_;
-	word_t data_length_digits_[4];
+	word_t data_length_digits_[4]; //as 64bit integer (16bit x 4 integer)
 	word_t h_[8];
 };
 

@@ -251,8 +251,8 @@ private:
 		for(std::size_t i = 0; i < 4; ++i) {
 			data_length_digits_[i] += carry;
 			if(data_length_digits_[i] >= 65536u) {
-				data_length_digits_[i] -= 65536u;
-				carry = 1;
+				carry = data_length_digits_[i]>>16;
+				data_length_digits_[i] &= 65535u;
 			}
 			else {
 				break;

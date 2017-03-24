@@ -77,7 +77,7 @@ std::string hash_hex_str = picosha2::hash256_hex_string(src_c_array, src_c_array
 ## Generating SHA256 hash byte sequence from random accessible container
 
 <pre>
-//any STL sequantial random accessible containers (array, vector, dequeue...)
+//any STL sequantial random accessible container (array, vector, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
 //any STL sequantial containers (array, list, dequeue...)
@@ -86,7 +86,7 @@ picosha2::hash256(src_str, hash);
 </pre>
 
 <pre>
-//any STL sequantial random accessible containers (array, vector, dequeue...)
+//any STL sequantial random accessible container (array, vector, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
 //any STL sequantial containers (array, list, dequeue...)

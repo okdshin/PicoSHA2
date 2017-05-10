@@ -25,6 +25,7 @@ THE SOFTWARE.
 #define PICOSHA2_H
 //picosha2:20140213
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <iterator>
 #include <cassert>
@@ -352,6 +353,23 @@ void hash256_hex_string(const RaContainer& src, std::string& hex_str){
 template<typename RaContainer>
 std::string hash256_hex_string(const RaContainer& src){
 	return hash256_hex_string(src.begin(), src.end());
+}
+
+std::string hash256_file_hex_string(const std::string& filename){
+	std::ifstream ifs(filename, std::ifstream::binary);
+	if (!ifs) {
+	    return "";
+	}
+
+	picosha2::hash256_one_by_one hasher;
+	std::vector<char> buffer(1024 * 1024); // use 1M memory
+	while (ifs.read(buffer.data(), static_cast<std::streamsize>(buffer.size()))) {
+	    hasher.process(buffer.begin(), buffer.end());
+	}
+	// process remaining bytes
+	hasher.process(buffer.begin(), buffer.begin() + static_cast<int>(ifs.gcount()));
+	hasher.finish();
+	return picosha2::get_hash_hex_string(hasher);
 }
 
 }//namespace picosha2

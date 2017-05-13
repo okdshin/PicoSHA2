@@ -210,10 +210,34 @@ void test(){
 		hasher.finish();
 		std::string one_by_one_hex_string;
 		get_hash_hex_string(hasher, one_by_one_hex_string);
+
 		std::string hex_string;
 		picosha2::hash256_hex_string(file_str.begin(), file_str.end(), hex_string);
 		PICOSHA2_CHECK_EQUAL(one_by_one_hex_string, hex_string);
+
 	}
+    {
+		std::string one_by_one_hex_string; {
+            picosha2::hash256_one_by_one hasher;
+            std::ifstream ifs("test.cpp");
+            std::string file_str((std::istreambuf_iterator<char>(ifs)), 
+                    std::istreambuf_iterator<char>());
+            std::size_t i = 0;
+            std::size_t block_size = file_str.length()/10;
+            for(i = 0; i+block_size <= file_str.length(); i+=block_size){
+                hasher.process(file_str.begin()+i, file_str.begin()+i+block_size);
+            }
+            hasher.process(file_str.begin()+i, file_str.end());
+            hasher.finish();
+            get_hash_hex_string(hasher, one_by_one_hex_string);
+        }
+
+        std::ifstream ifs("test.cpp");
+        auto first = std::istreambuf_iterator<char>(ifs);
+        auto last = std::istreambuf_iterator<char>();
+        auto hex_string = picosha2::hash256_hex_string(first, last);
+        PICOSHA2_CHECK_EQUAL(one_by_one_hex_string, hex_string);
+    }
 }
 
 int main(int argc, char* argv[])

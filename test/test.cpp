@@ -195,6 +195,12 @@ void test(){
             std::string hash_hex_str = picosha2::hash256_hex_string(src_vect);
             PICOSHA2_CHECK_EQUAL(ans_hex_str, hash_hex_str);
         }
+        {
+            std::list<char> src(src_str.begin(), src_str.end());
+            std::vector<unsigned char> hash(32);
+            picosha2::hash256(src.begin(), src.end(), hash.begin(), hash.end());
+            PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
+        }
     }
     {
         picosha2::hash256_one_by_one hasher;

@@ -14,7 +14,7 @@ PicoSHA2 is a tiny SHA256 hash generator for C++ with following properties:
 ## Generation SHA256 hash
 
 <pre>
-// any container (vector, deque, list...)
+// any STL sequantial container (vector, list, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 std::vector&lt;unsigned char&gt; hash(32);
 picosha2::hash256(src_str.begin(), src_str.end(), hash.begin(), hash.end());
@@ -91,22 +91,22 @@ std::string hash_hex_str = picosha2::hash256_hex_string(src_c_array, src_c_array
 </pre>
 
 
-## Generating SHA256 hash byte sequence from random accessible container
+## Generating SHA256 hash byte sequence from STL sequantial container
 
 <pre>
-//any STL sequantial random accessible container (array, vector, dequeue...)
+//any STL sequantial container (vector, list, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
-//any STL sequantial containers (array, list, dequeue...)
+//any STL sequantial containers (vector, list, dequeue...)
 std::vector&lt;unsigned char&gt; hash(32); 
 picosha2::hash256(src_str, hash);
 </pre>
 
 <pre>
-//any STL sequantial random accessible container (array, vector, dequeue...)
+//any STL sequantial container (vector, list, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
-//any STL sequantial containers (array, list, dequeue...)
+//any STL sequantial containers (vector, list, dequeue...)
 std::vector&lt;unsigned char&gt; hash(32);
 picosha2::hash256(src_str.begin(), src_str.end(), hash);
 </pre>

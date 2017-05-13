@@ -24,10 +24,11 @@ THE SOFTWARE.
 #ifndef PICOSHA2_H
 #define PICOSHA2_H
 //picosha2:20140213
+
 #ifndef PICOSHA2_BUFFER_SIZE_FOR_INPUT_ITERATOR
-#define PICOSHA2_BUFFER_SIZE_FOR_INPUT_ITERATOR 1048576 // default is 1MB memory
+#define PICOSHA2_BUFFER_SIZE_FOR_INPUT_ITERATOR 1048576 //=1024*1024: default is 1MB memory
 #endif
-#include <iostream>
+
 #include <vector>
 #include <iterator>
 #include <cassert>
@@ -316,7 +317,6 @@ namespace impl {
     template<typename InputIter, typename OutIter>
     void hash256_impl(InputIter first, InputIter last, OutIter first2, OutIter last2,
             int buffer_size, std::input_iterator_tag){
-        std::cout << "input iterator" << std::endl;
         std::vector<byte_t> buffer(buffer_size);
         hash256_one_by_one hasher;
         //hasher.init();
@@ -344,24 +344,24 @@ void hash256(InIter first, InIter last, OutIter first2, OutIter last2,
 }
 
 
-template<typename RaIter, typename OutContainer>
-void hash256(RaIter first, RaIter last, OutContainer& dst){
+template<typename InIter, typename OutContainer>
+void hash256(InIter first, InIter last, OutContainer& dst){
     hash256(first, last, dst.begin(), dst.end());
 }
 
-template<typename RaContainer, typename OutIter>
-void hash256(const RaContainer& src, OutIter first, OutIter last){
+template<typename InContainer, typename OutIter>
+void hash256(const InContainer& src, OutIter first, OutIter last){
     hash256(src.begin(), src.end(), first, last);
 }
 
-template<typename RaContainer, typename OutContainer>
-void hash256(const RaContainer& src, OutContainer& dst){
+template<typename InContainer, typename OutContainer>
+void hash256(const InContainer& src, OutContainer& dst){
     hash256(src.begin(), src.end(), dst.begin(), dst.end());
 }
 
 
-template<typename RaIter>
-void hash256_hex_string(RaIter first, RaIter last, std::string& hex_str){
+template<typename InIter>
+void hash256_hex_string(InIter first, InIter last, std::string& hex_str){
     byte_t hashed[32];
     hash256(first, last, hashed, hashed+32);
     std::ostringstream oss;
@@ -369,8 +369,8 @@ void hash256_hex_string(RaIter first, RaIter last, std::string& hex_str){
     hex_str.assign(oss.str());
 }
 
-template<typename RaIter>
-std::string hash256_hex_string(RaIter first, RaIter last){
+template<typename InIter>
+std::string hash256_hex_string(InIter first, InIter last){
     std::string hex_str;
     hash256_hex_string(first, last, hex_str);
     return hex_str;

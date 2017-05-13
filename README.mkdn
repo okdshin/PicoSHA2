@@ -48,7 +48,7 @@ std::vector&lt;unsigned char&gt; hash(32);
 picosha2::hash256(std::istream_iterator<char>(ifs), std::istream_iterator<char>(), hash.begin(), hash.end());
 </pre>
 
-This `hash256` uses less memory than reading whole of the file.
+This `hash256` may use less memory than reading whole of the file.
 
 ## Generating SHA256 hash hex string from std::string
 

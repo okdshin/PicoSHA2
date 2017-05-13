@@ -1,6 +1,6 @@
 # PicoSHA2 - a C++ SHA256 hash generator
 
-Copyright &copy; 2014 okdshin
+Copyright &copy; 2017 okdshin
 
 ## Introduction
 

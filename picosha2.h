@@ -380,13 +380,13 @@ void hash256_hex_string(const std::string& src, std::string& hex_str){
     hash256_hex_string(src.begin(), src.end(), hex_str);
 }
 
-template<typename RaContainer>
-void hash256_hex_string(const RaContainer& src, std::string& hex_str){
+template<typename InContainer>
+void hash256_hex_string(const InContainer& src, std::string& hex_str){
     hash256_hex_string(src.begin(), src.end(), hex_str);
 }
 
-template<typename RaContainer>
-std::string hash256_hex_string(const RaContainer& src){
+template<typename InContainer>
+std::string hash256_hex_string(const InContainer& src){
     return hash256_hex_string(src.begin(), src.end());
 }
 

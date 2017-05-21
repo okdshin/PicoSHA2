@@ -40,7 +40,7 @@ std::string hex_str = picosha2::get_hash_hex_string(hasher);
 
 example/interactive_hasher.cpp has more detail information.
 
-## Generating SHA256 hash from a file
+## Generating SHA256 hash from a binary file
 
 <pre>
 std::ifstream ifs("file.txt", std::ios::binary);

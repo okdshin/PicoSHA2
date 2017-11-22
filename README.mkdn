@@ -89,7 +89,7 @@ std::string hash_hex_str = picosha2::hash256_hex_string(src_c_array, src_c_array
 ```
 
 
-## Generating SHA256 hash byte sequence from STL sequantial container
+## Generating SHA256 hash byte sequence from STL sequential container
 
 ```c++
 //any STL sequantial container (vector, list, dequeue...)

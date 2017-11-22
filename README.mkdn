@@ -13,121 +13,104 @@ PicoSHA2 is a tiny SHA256 hash generator for C++ with following properties:
 
 ## Generating SHA256 hash and hash hex string
 
-<pre>
+```c++
 // any STL sequantial container (vector, list, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
-std::vector&lt;unsigned char&gt; hash(32);
+std::vector<unsigned char> hash(32);
 picosha2::hash256(src_str.begin(), src_str.end(), hash.begin(), hash.end());
 
 std::string hex_str = picosha2::bytes_to_hex_string(hash.begin(), hash.end());
-</pre>
+```
 
 ## Generating SHA256 hash and hash hex string from byte stream
 
-<pre>
+```c++
 picosha2::hash256_one_by_one hasher;
 ...
 hasher.process(block.begin(), block.end());
 ...
 hasher.finish();
 
-std::vector&lt;unsigned char&gt; hash(32);
+std::vector<unsigned char> hash(32);
 hasher.get_hash_bytes(hash.begin(), hash.end());
 
 std::string hex_str = picosha2::get_hash_hex_string(hasher);
-</pre>
+```
 
-example/interactive_hasher.cpp has more detail information.
+The file `example/interactive_hasher.cpp` has more detailed information.
 
 ## Generating SHA256 hash from a binary file
 
-<pre>
+```c++
 std::ifstream ifs("file.txt", std::ios::binary);
-std::vector&lt;unsigned char&gt; hash(32);
+std::vector<unsigned char> hash(32);
 picosha2::hash256(std::istreambuf_iterator&ltchar&gt(ifs), std::istreambuf_iterator&ltchar&gt(), hash.begin(), hash.end());
-</pre>
+```
 
 This `hash256` may use less memory than reading whole of the file.
 
 ## Generating SHA256 hash hex string from std::string
 
-<pre>
+```c++
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 std::string hash_hex_str;
 picosha2::hash256_hex_string(src_str, hash_hex_str);
-std::cout &lt;&lt; hash_hex_str &lt;&lt; std::endl;
+std::cout << hash_hex_str << std::endl;
 //this output is "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"
-</pre>
 
-<pre>
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 std::string hash_hex_str = picosha2::hash256_hex_string(src_str);
-std::cout &lt;&lt; hash_hex_str &lt;&lt; std::endl;
+std::cout << hash_hex_str << std::endl;
 //this output is "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"
-</pre>
 
-<pre>
 std::string src_str = "The quick brown fox jumps over the lazy dog.";//add '.'
 std::string hash_hex_str = picosha2::hash256_hex_string(src_str.begin(), src_str.end());
-std::cout &lt;&lt; hash_hex_str &lt;&lt; std::endl;
+std::cout << hash_hex_str << std::endl;
 //this output is "ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c"
-</pre>
-
+```
 
 ## Generating SHA256 hash hex string from byte sequence
 
-<pre>
-std::vector&lt;unsigned char&gt; src_vect(...);
+```c++
+std::vector<unsigned char> src_vect(...);
 std::string hash_hex_str;
 picosha2::hash256_hex_string(src_vect, hash_hex_str);
-</pre>
 
-<pre>
-std::vector&lt;unsigned char&gt; src_vect(...);
+std::vector<unsigned char> src_vect(...);
 std::string hash_hex_str = picosha2::hash256_hex_string(src_vect);
-</pre>
 
-<pre>
 unsigned char src_c_array[32] = {...};
 std::string hash_hex_str;
 picosha2::hash256_hex_string(src_c_array, src_c_array+32, hash_hex_str);
-</pre>
 
-<pre>
 unsigned char src_c_array[32] = {...};
 std::string hash_hex_str = picosha2::hash256_hex_string(src_c_array, src_c_array+32);
-</pre>
+```
 
 
 ## Generating SHA256 hash byte sequence from STL sequantial container
 
-<pre>
+```c++
 //any STL sequantial container (vector, list, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
 //any STL sequantial containers (vector, list, dequeue...)
-std::vector&lt;unsigned char&gt; hash(32); 
+std::vector<unsigned char> hash(32);
 picosha2::hash256(src_str, hash);
-</pre>
 
-<pre>
 //any STL sequantial container (vector, list, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
 //any STL sequantial containers (vector, list, dequeue...)
-std::vector&lt;unsigned char&gt; hash(32);
+std::vector<unsigned char> hash(32);
 picosha2::hash256(src_str.begin(), src_str.end(), hash);
-</pre>
 
-<pre>
 std::string src_str = "The quick brown fox jumps over the lazy dog";
-unsigned char hash_byte_c_array[32]; 
+unsigned char hash_byte_c_array[32];
 picosha2::hash256(src_str, hash_byte_c_array, hash_byte_c_array+32);
-</pre>
 
-<pre>
 std::string src_str = "The quick brown fox jumps over the lazy dog";
-std::vector&lt;unsigned char&gt; hash(32);
+std::vector<unsigned char> hash(32);
 picosha2::hash256(src_str.begin(), src_str.end(), hash.begin(), hash.end());
-</pre>
+```

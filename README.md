@@ -58,12 +58,16 @@ std::string hash_hex_str;
 picosha2::hash256_hex_string(src_str, hash_hex_str);
 std::cout << hash_hex_str << std::endl;
 //this output is "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"
+```
 
+```c++
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 std::string hash_hex_str = picosha2::hash256_hex_string(src_str);
 std::cout << hash_hex_str << std::endl;
 //this output is "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"
+```
 
+```c++
 std::string src_str = "The quick brown fox jumps over the lazy dog.";//add '.'
 std::string hash_hex_str = picosha2::hash256_hex_string(src_str.begin(), src_str.end());
 std::cout << hash_hex_str << std::endl;
@@ -76,14 +80,20 @@ std::cout << hash_hex_str << std::endl;
 std::vector<unsigned char> src_vect(...);
 std::string hash_hex_str;
 picosha2::hash256_hex_string(src_vect, hash_hex_str);
+```
 
+```c++
 std::vector<unsigned char> src_vect(...);
 std::string hash_hex_str = picosha2::hash256_hex_string(src_vect);
+```
 
+```c++
 unsigned char src_c_array[32] = {...};
 std::string hash_hex_str;
 picosha2::hash256_hex_string(src_c_array, src_c_array+32, hash_hex_str);
+```
 
+```c++
 unsigned char src_c_array[32] = {...};
 std::string hash_hex_str = picosha2::hash256_hex_string(src_c_array, src_c_array+32);
 ```
@@ -97,20 +107,32 @@ std::string src_str = "The quick brown fox jumps over the lazy dog";
 
 //any STL sequantial containers (vector, list, dequeue...)
 std::vector<unsigned char> hash(32);
-picosha2::hash256(src_str, hash);
 
+// in: container, out: container
+picosha2::hash256(src_str, hash);
+```
+
+```c++
 //any STL sequantial container (vector, list, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
 //any STL sequantial containers (vector, list, dequeue...)
 std::vector<unsigned char> hash(32);
-picosha2::hash256(src_str.begin(), src_str.end(), hash);
 
+// in: iterator pair, out: contaner
+picosha2::hash256(src_str.begin(), src_str.end(), hash);
+```
+
+```c++
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 unsigned char hash_byte_c_array[32];
+// in: container, out: iterator(pointer) pair
 picosha2::hash256(src_str, hash_byte_c_array, hash_byte_c_array+32);
+```
 
+```c++
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 std::vector<unsigned char> hash(32);
+// in: iterator pair, out: iterator pair
 picosha2::hash256(src_str.begin(), src_str.end(), hash.begin(), hash.end());
 ```

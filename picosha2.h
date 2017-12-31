@@ -193,12 +193,12 @@ class hash256_one_by_one {
         typename std::iterator_traits<RaIter>::difference_type size =
             std::distance(first, last);
         if (size > 4294967295u) {
-            typename std::iterator_traits<RaIter>::difference_type half_size = (size >> 1);
-            process(first, first+half_size);
-            process(first+half_size, last);
-        }
-        else {
-            add_to_data_length(std::distance(first, last));
+            typename std::iterator_traits<RaIter>::difference_type half_size =
+                (size >> 1);
+            process(first, first + half_size);
+            process(first + half_size, last);
+        } else {
+            add_to_data_length(static_cast<word_t>(std::distance(first, last)));
             std::copy(first, last, std::back_inserter(buffer_));
             std::size_t i = 0;
             for (; i + 64 <= buffer_.size(); i += 64) {

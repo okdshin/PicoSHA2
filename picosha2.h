@@ -190,14 +190,23 @@ class hash256_one_by_one {
 
     template <typename RaIter>
     void process(RaIter first, RaIter last) {
-        add_to_data_length(std::distance(first, last));
-        std::copy(first, last, std::back_inserter(buffer_));
-        std::size_t i = 0;
-        for (; i + 64 <= buffer_.size(); i += 64) {
-            detail::hash256_block(h_, buffer_.begin() + i,
-                                  buffer_.begin() + i + 64);
+        typename std::iterator_traits<RaIter>::difference_type size =
+            std::distance(first, last);
+        if (size > 4294967295u) {
+            typename std::iterator_traits<RaIter>::difference_type half_size = (size >> 1);
+            process(first, first+half_size);
+            process(first+half_size, last);
         }
-        buffer_.erase(buffer_.begin(), buffer_.begin() + i);
+        else {
+            add_to_data_length(std::distance(first, last));
+            std::copy(first, last, std::back_inserter(buffer_));
+            std::size_t i = 0;
+            for (; i + 64 <= buffer_.size(); i += 64) {
+                detail::hash256_block(h_, buffer_.begin() + i,
+                                      buffer_.begin() + i + 64);
+            }
+            buffer_.erase(buffer_.begin(), buffer_.begin() + i);
+        }
     }
 
     void finish() {
@@ -313,7 +322,7 @@ void hash256_impl(InputIter first, InputIter last, OutIter first2,
     hasher.finish();
     hasher.get_hash_bytes(first2, last2);
 }
-}
+}  // namespace impl
 
 template <typename InIter, typename OutIter>
 void hash256(InIter first, InIter last, OutIter first2, OutIter last2,

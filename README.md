@@ -45,7 +45,7 @@ The file `example/interactive_hasher.cpp` has more detailed information.
 ```c++
 std::ifstream ifs("file.txt", std::ios::binary);
 std::vector<unsigned char> hash(32);
-picosha2::hash256(std::istreambuf_iterator&ltchar&gt(ifs), std::istreambuf_iterator&ltchar&gt(), hash.begin(), hash.end());
+picosha2::hash256(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), hash.begin(), hash.end());
 ```
 
 This `hash256` may use less memory than reading whole of the file.

@@ -40,6 +40,8 @@ namespace picosha2 {
 typedef unsigned long word_t;
 typedef unsigned char byte_t;
 
+static const size_t KDigestSize = 32;
+
 namespace detail {
 inline byte_t mask_8bit(byte_t x) { return x & 0xff; }
 
@@ -271,9 +273,9 @@ class hash256_one_by_one {
 
 inline void get_hash_hex_string(const hash256_one_by_one& hasher,
                                 std::string& hex_str) {
-    byte_t hash[32];
-    hasher.get_hash_bytes(hash, hash + 32);
-    return bytes_to_hex_string(hash, hash + 32, hex_str);
+    byte_t hash[KDigestSize];
+    hasher.get_hash_bytes(hash, hash + KDigestSize);
+    return bytes_to_hex_string(hash, hash + KDigestSize, hex_str);
 }
 
 inline std::string get_hash_hex_string(const hash256_one_by_one& hasher) {
@@ -340,10 +342,10 @@ void hash256(const InContainer& src, OutContainer& dst) {
 
 template <typename InIter>
 void hash256_hex_string(InIter first, InIter last, std::string& hex_str) {
-    byte_t hashed[32];
-    hash256(first, last, hashed, hashed + 32);
+    byte_t hashed[KDigestSize];
+    hash256(first, last, hashed, hashed + KDigestSize);
     std::ostringstream oss;
-    output_hex(hashed, hashed + 32, oss);
+    output_hex(hashed, hashed + KDigestSize, oss);
     hex_str.assign(oss.str());
 }
 

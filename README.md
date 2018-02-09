@@ -17,7 +17,7 @@ PicoSHA2 is a tiny SHA256 hash generator for C++ with following properties:
 // any STL sequantial container (vector, list, dequeue...)
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
-std::vector<unsigned char> hash(32);
+std::vector<unsigned char> hash(picosha2::KDigestSize);
 picosha2::hash256(src_str.begin(), src_str.end(), hash.begin(), hash.end());
 
 std::string hex_str = picosha2::bytes_to_hex_string(hash.begin(), hash.end());
@@ -32,7 +32,7 @@ hasher.process(block.begin(), block.end());
 ...
 hasher.finish();
 
-std::vector<unsigned char> hash(32);
+std::vector<unsigned char> hash(picosha2::KDigestSize);
 hasher.get_hash_bytes(hash.begin(), hash.end());
 
 std::string hex_str = picosha2::get_hash_hex_string(hasher);
@@ -44,7 +44,7 @@ The file `example/interactive_hasher.cpp` has more detailed information.
 
 ```c++
 std::ifstream ifs("file.txt", std::ios::binary);
-std::vector<unsigned char> hash(32);
+std::vector<unsigned char> hash(picosha2::KDigestSize);
 picosha2::hash256(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), hash.begin(), hash.end());
 ```
 
@@ -88,14 +88,14 @@ std::string hash_hex_str = picosha2::hash256_hex_string(src_vect);
 ```
 
 ```c++
-unsigned char src_c_array[32] = {...};
+unsigned char src_c_array[picosha2::KDigestSize] = {...};
 std::string hash_hex_str;
-picosha2::hash256_hex_string(src_c_array, src_c_array+32, hash_hex_str);
+picosha2::hash256_hex_string(src_c_array, src_c_array+picosha2::KDigestSize, hash_hex_str);
 ```
 
 ```c++
-unsigned char src_c_array[32] = {...};
-std::string hash_hex_str = picosha2::hash256_hex_string(src_c_array, src_c_array+32);
+unsigned char src_c_array[picosha2::KDigestSize] = {...};
+std::string hash_hex_str = picosha2::hash256_hex_string(src_c_array, src_c_array+picosha2::KDigestSize);
 ```
 
 
@@ -106,7 +106,7 @@ std::string hash_hex_str = picosha2::hash256_hex_string(src_c_array, src_c_array
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
 //any STL sequantial containers (vector, list, dequeue...)
-std::vector<unsigned char> hash(32);
+std::vector<unsigned char> hash(picosha2::KDigestSize);
 
 // in: container, out: container
 picosha2::hash256(src_str, hash);
@@ -117,7 +117,7 @@ picosha2::hash256(src_str, hash);
 std::string src_str = "The quick brown fox jumps over the lazy dog";
 
 //any STL sequantial containers (vector, list, dequeue...)
-std::vector<unsigned char> hash(32);
+std::vector<unsigned char> hash(picosha2::KDigestSize);
 
 // in: iterator pair, out: contaner
 picosha2::hash256(src_str.begin(), src_str.end(), hash);
@@ -125,14 +125,14 @@ picosha2::hash256(src_str.begin(), src_str.end(), hash);
 
 ```c++
 std::string src_str = "The quick brown fox jumps over the lazy dog";
-unsigned char hash_byte_c_array[32];
+unsigned char hash_byte_c_array[picosha2::KDigestSize];
 // in: container, out: iterator(pointer) pair
-picosha2::hash256(src_str, hash_byte_c_array, hash_byte_c_array+32);
+picosha2::hash256(src_str, hash_byte_c_array, hash_byte_c_array+picosha2::KDigestSize);
 ```
 
 ```c++
 std::string src_str = "The quick brown fox jumps over the lazy dog";
-std::vector<unsigned char> hash(32);
+std::vector<unsigned char> hash(picosha2::KDigestSize);
 // in: iterator pair, out: iterator pair
 picosha2::hash256(src_str.begin(), src_str.end(), hash.begin(), hash.end());
 ```

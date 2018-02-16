@@ -96,36 +96,36 @@ void test(){
         std::string src_str = sample_message_list[i].first;
         std::cout << "src_str: " << src_str  << " size: " << src_str.length() << std::endl;
         std::string ans_hex_str = sample_message_list[i].second;
-        std::vector<unsigned char> ans(32);
+        std::vector<unsigned char> ans(picosha2::k_digest_size);
         hex_string_to_bytes(ans_hex_str, ans);
         {
-            std::vector<unsigned char> hash(32);
+            std::vector<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_str.begin(), src_str.end(), hash.begin(), hash.end());
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
         {
-            std::vector<unsigned char> hash(32);
+            std::vector<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_str, hash);
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
         {
-            std::vector<unsigned char> hash(32);
+            std::vector<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_str.begin(), src_str.end(), hash);
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
         {
-            unsigned char hash_c_array[32];
-            picosha2::hash256(src_str.begin(), src_str.end(), hash_c_array, hash_c_array+32);
-            std::vector<unsigned char> hash(hash_c_array, hash_c_array+32);
+            unsigned char hash_c_array[picosha2::k_digest_size];
+            picosha2::hash256(src_str.begin(), src_str.end(), hash_c_array, hash_c_array+picosha2::k_digest_size);
+            std::vector<unsigned char> hash(hash_c_array, hash_c_array+picosha2::k_digest_size);
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
         {
-            std::list<unsigned char> hash(32);
+            std::list<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_str.begin(), src_str.end(), hash.begin(), hash.end());
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
         {
-            std::list<unsigned char> hash(32);
+            std::list<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_str, hash);
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
@@ -151,28 +151,28 @@ void test(){
         
         std::vector<unsigned char> src_vect(src_str.begin(), src_str.end());
         {
-            std::vector<unsigned char> hash(32);
+            std::vector<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_vect.begin(), src_vect.end(), hash.begin(), hash.end());
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
         {
-            std::vector<unsigned char> hash(32);
+            std::vector<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_vect, hash);
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
         {
-            std::list<unsigned char> hash(32);
+            std::list<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_vect.begin(), src_vect.end(), hash.begin(), hash.end());
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
         {
-            std::list<unsigned char> hash(32);
+            std::list<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_vect.data(), src_vect.data()+src_vect.size(), 
                     hash.begin(), hash.end());
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
         {
-            std::list<unsigned char> hash(32);
+            std::list<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src_vect, hash);
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }
@@ -197,7 +197,7 @@ void test(){
         }
         {
             std::list<char> src(src_str.begin(), src_str.end());
-            std::vector<unsigned char> hash(32);
+            std::vector<unsigned char> hash(picosha2::k_digest_size);
             picosha2::hash256(src.begin(), src.end(), hash.begin(), hash.end());
             PICOSHA2_CHECK_EQUAL_BYTES(ans, hash);
         }

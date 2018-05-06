@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include <iterator>
 #include <sstream>
 #include <vector>
-
+#include <fstream>
 namespace picosha2 {
 typedef unsigned long word_t;
 typedef unsigned char byte_t;
@@ -369,7 +369,12 @@ template <typename InContainer>
 std::string hash256_hex_string(const InContainer& src) {
     return hash256_hex_string(src.begin(), src.end());
 }
-
-}  // namespace picosha2
-
+std::string hash256_from_ifstream(std::ifstream f){
+    std::vector<char> data;
+    data.insert(data.begin(),std::istreambuf_iterator<char>(f), std::istreambuf_iterator<char>());
+    std::string hashed;
+    hash256_hex_string(std::string(data.begin(),data.end()), hashed);
+    return hashed;
+}
+}// namespace picosha2
 #endif  // PICOSHA2_H

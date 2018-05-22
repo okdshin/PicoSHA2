@@ -192,7 +192,7 @@ class hash256_one_by_one {
 
     template <typename RaIter>
     void process(RaIter first, RaIter last) {
-        add_to_data_length(std::distance(first, last));
+        add_to_data_length(static_cast<word_t>(std::distance(first, last)));
         std::copy(first, last, std::back_inserter(buffer_));
         std::size_t i = 0;
         for (; i + 64 <= buffer_.size(); i += 64) {

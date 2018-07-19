@@ -43,9 +43,9 @@ The file `example/interactive_hasher.cpp` has more detailed information.
 ## Generating SHA256 hash from a binary file
 
 ```c++
-std::ifstream ifs("file.txt", std::ios::binary);
-std::vector<unsigned char> hash(picosha2::k_digest_size);
-picosha2::hash256(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), hash.begin(), hash.end());
+    std::ifstream f("file.txt", std::ios::binary);
+    std::vector<unsigned char> s(picosha2::k_digest_size);
+    picosha2::hash256(f, s.begin(), s.end());
 ```
 
 This `hash256` may use less memory than reading whole of the file.

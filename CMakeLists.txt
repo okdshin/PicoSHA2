@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(pico)
 
-option(PICO_TEST "build test" ON)
-option(PICO_EXAMPLE "build example" ON)
+option(PICO_TEST "build test" OFF)
+option(PICO_EXAMPLE "build example" OFF)
 
 if(PICO_TEST)
     add_subdirectory(test)

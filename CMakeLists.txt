@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(pico)
 
-option(PICO_TEST "build test" OFF)
-option(PICO_EXAMPLE "build example" OFF)
+option(PICO_TEST "build test" ON)
+option(PICO_EXAMPLE "build example" ON)
 
 if(PICO_TEST)
     add_subdirectory(test)
@@ -13,4 +13,4 @@ if(PICO_EXAMPLE)
 endif()
 
 add_library(${PROJECT_NAME} INTERFACE)
-target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

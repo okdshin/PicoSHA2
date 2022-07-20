@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.10)
-
 include(CTest)
 
 add_executable(unittest test.cpp)

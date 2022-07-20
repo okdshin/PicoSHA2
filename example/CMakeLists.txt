@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.10)
-
 add_executable(hasher hasher.cpp)
 target_link_libraries(hasher PRIVATE picosha2)
 

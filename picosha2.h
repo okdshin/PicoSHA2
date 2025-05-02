@@ -207,6 +207,17 @@ class hash256_one_by_one {
         std::fill(temp, temp + 64, byte_t(0));
         std::size_t remains = buffer_.size();
         std::copy(buffer_.begin(), buffer_.end(), temp);
+        assert(remains < 64);
+
+        // This branch is not executed actually (`remains` is always lower than 64),
+        // but needed to avoid g++ false-positive warning.
+        // See https://github.com/okdshin/PicoSHA2/issues/25
+        // vvvvvvvvvvvvvvvv
+        if(remains >= 64) {
+            remains = 63;
+        }
+        // ^^^^^^^^^^^^^^^^
+
         temp[remains] = 0x80;
 
         if (remains > 55) {

@@ -94,7 +94,7 @@ void hash256_block(RaIter1 message_digest, RaIter2 first, RaIter2 last) {
     static_cast<void>(last);  // for avoiding unused-variable warning
     word_t w[64];
     std::fill(w, w + 64, word_t(0));
-    for (std::size_t i = 0; i < 16; ++i) {
+    for (std::ptrdiff_t i = 0; i < 16; ++i) {
         w[i] = (static_cast<word_t>(mask_8bit(*(first + i * 4))) << 24) |
                (static_cast<word_t>(mask_8bit(*(first + i * 4 + 1))) << 16) |
                (static_cast<word_t>(mask_8bit(*(first + i * 4 + 2))) << 8) |
@@ -194,8 +194,8 @@ class hash256_one_by_one {
     void process(RaIter first, RaIter last) {
         add_to_data_length(static_cast<word_t>(std::distance(first, last)));
         std::copy(first, last, std::back_inserter(buffer_));
-        std::size_t i = 0;
-        for (; i + 64 <= buffer_.size(); i += 64) {
+        std::ptrdiff_t i = 0;
+        for (; i + 64 <= static_cast<std::ptrdiff_t>(buffer_.size()); i += 64) {
             detail::hash256_block(h_, buffer_.begin() + i,
                                   buffer_.begin() + i + 64);
         }
@@ -308,13 +308,13 @@ void hash256_impl(RaIter first, RaIter last, OutIter first2, OutIter last2, int,
 
 template <typename InputIter, typename OutIter>
 void hash256_impl(InputIter first, InputIter last, OutIter first2,
-                  OutIter last2, int buffer_size, std::input_iterator_tag) {
+                  OutIter last2, unsigned int buffer_size, std::input_iterator_tag) {
     std::vector<byte_t> buffer(buffer_size);
     hash256_one_by_one hasher;
     // hasher.init();
     while (first != last) {
-        int size = buffer_size;
-        for (int i = 0; i != buffer_size; ++i, ++first) {
+        unsigned int size = buffer_size;
+        for (unsigned int i = 0; i != buffer_size; ++i, ++first) {
             if (first == last) {
                 size = i;
                 break;
